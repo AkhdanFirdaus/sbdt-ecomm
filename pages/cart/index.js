@@ -57,7 +57,7 @@ export default function Cart() {
               <p className="text-sm text-slate-400">Pajak dan Harga Ongkir belum termasuk</p>
             </div>
             <div>
-              <button className="px-4 py-2 bg-green-600 hover:bg-green-800 rounded text-white">Check Out</button>
+              <Link href='/checkout' className="px-4 py-2 bg-green-600 hover:bg-green-800 rounded text-white">Check Out</Link>
             </div>
           </div>
         </div>

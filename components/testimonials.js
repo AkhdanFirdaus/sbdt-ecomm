@@ -28,7 +28,7 @@ const data = [
 
 function Item(data) {
   return (
-    <div className="bg-white rounded p-5 flex flex-col justify-between items-center space-y-3">
+    <div key={data.id} className="bg-white rounded p-5 flex flex-col justify-between items-center space-y-3">
       <Image alt={data.name} src={data.avatar} className='object-cover' />
       <div className='flex flex-row space-x-1'>
         {[1, 2, 3, 4, 5].map(i => {
