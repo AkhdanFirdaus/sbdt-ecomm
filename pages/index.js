@@ -1,8 +1,12 @@
 import Head from 'next/head'
 import Banner from '../components/banner'
+import Footer from '../components/footer'
 
 import Headers from '../components/header'
-
+import Info from '../components/info'
+import Popular from '../components/popular'
+import Products from '../components/products'
+import Testimonials from '../components/testimonials'
 
 export default function Home() {
   return (
@@ -17,11 +21,13 @@ export default function Home() {
 
       <main>
         <Banner />
+        <Products />
+        <Info />
+        <Testimonials />
+        <Popular />
       </main>
 
-      <footer>
-        footer
-      </footer>
+      <Footer />
     </div>
   )
 }

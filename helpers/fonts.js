@@ -1,4 +1,9 @@
-import { Roboto, Abyssinica_SIL } from '@next/font/google'
+import { Roboto, Abyssinica_SIL, Poppins, Simonetta } from '@next/font/google'
+
+export const simonetta = Simonetta({
+  weight: '400',
+  subsets: ['latin']
+})
 
 export const roboto = Roboto({
   weight: '900',
@@ -10,3 +15,7 @@ export const abyssinica = Abyssinica_SIL({
   subsets: ['latin']
 })
 
+export const poppins = Poppins({
+  weight: '400',
+  subsets: ['latin']
+})
