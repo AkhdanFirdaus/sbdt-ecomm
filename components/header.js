@@ -5,8 +5,11 @@ import zetaava from '../public/assets/zeta-ava-1.png'
 
 import { roboto } from '../helpers/fonts'
 import Link from 'next/link'
+import { useContext } from 'react'
+import CartContext from '../lib/CartContext'
 
 export default function Headers() {
+  const cartctx = useContext(CartContext)
   return (
     <header className={`bg-white ${roboto.className}`}>
       <nav className='container mx-auto p-4'>
@@ -26,6 +29,7 @@ export default function Headers() {
           <li>
             <Link href={'/cart'}>
               <FontAwesomeIcon icon={faShoppingCart} width={24} height={24} />
+              {cartctx.state.cart.length}
             </Link>
           </li>
         </ul>

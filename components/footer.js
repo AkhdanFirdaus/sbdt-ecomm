@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { simonetta } from '../helpers/fonts'
 
@@ -82,7 +83,7 @@ export default function Footer() {
           </div>
           <div className="grid grid-rows-4 grid-flow-col gap-4">
             {menu.map(item => {
-              return <div key={item.id} className={(item.id%4)==1 ? 'text-green-700' : ''}>{item.name}</div>
+              return <Link href="" key={item.id} className={(item.id%4)==1 ? 'text-green-700' : ''}>{item.name}</Link>
             })}
           </div>
         </div>

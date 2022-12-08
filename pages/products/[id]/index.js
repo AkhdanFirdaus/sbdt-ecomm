@@ -2,6 +2,7 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
 import { useRouter } from "next/router"
+import { useContext, useState } from "react"
 import Footer from "../../../components/footer"
 import Headers from "../../../components/header"
 import QuantityInput from "../../../components/quantityinput"
@@ -9,11 +10,15 @@ import QuantityInput from "../../../components/quantityinput"
 import { products } from '../../../helpers/dummy'
 import { rupiahFormater } from "../../../helpers/formatter"
 
+import CartContext from "../../../lib/CartContext"
+
 function ProductPage() {
   const router = useRouter()
   const { id } = router.query
-
   const product = products.filter(item => item.id == id)[0]
+  const value = useContext(CartContext)
+  const [qty, setQty] = useState(1)
+
   return (
     <>
       <Headers />
@@ -29,8 +34,23 @@ function ProductPage() {
           <div className="p-5 space-y-5">
             <h3 className="font-bold text-2xl">{product.title}</h3>
             <p className="text-green-600 font-bold text-lg">{rupiahFormater(product.price)}</p>
-            <QuantityInput />
-            <button className="flex justify-between items-center bg-green-500 px-4 py-2 text-white"><FontAwesomeIcon icon={faShoppingCart} width={24} height={24} /> + Add to Cart</button>
+            <QuantityInput count={qty} setCount={setQty} />
+            <button 
+              className="flex justify-between items-center bg-green-500 px-4 py-2 text-white"
+              type="button"
+              onClick={() => {
+                const currentCart = value.state.cart
+                value.setCart([
+                  ...currentCart,
+                  {
+                    product_id: product.id,
+                    qty
+                  }
+                ])
+              }}
+            >
+                <FontAwesomeIcon icon={faShoppingCart} width={24} height={24} /> + Add to Cart
+            </button>
             <div className="border border-dotted p-5">
               <dl className="grid grid-cols-1 md:grid-cols-2">
                 <dd>Kondisi</dd>
