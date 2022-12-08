@@ -4,6 +4,7 @@ import Image from 'next/image'
 import zetaava from '../public/assets/zeta-ava-1.png'
 
 import { roboto } from '../helpers/fonts'
+import Link from 'next/link'
 
 export default function Headers() {
   return (
@@ -23,7 +24,9 @@ export default function Headers() {
             <FontAwesomeIcon icon={faUser} width={24} height={24} />
           </li>
           <li>
-            <FontAwesomeIcon icon={faShoppingCart} width={24} height={24} />
+            <Link href={'/cart'}>
+              <FontAwesomeIcon icon={faShoppingCart} width={24} height={24} />
+            </Link>
           </li>
         </ul>
       </nav>
