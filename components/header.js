@@ -15,7 +15,9 @@ export default function Headers() {
       <nav className='container mx-auto p-4'>
         <ul className='flex justify-between items-center'>
           <li>
-            <Image src={zetaava} alt='Brand' width={32} height={32} />
+            <Link href='/'>
+              <Image src={zetaava} alt='Brand' width={32} height={32} />
+            </Link>
           </li>
           <li>Discovery</li>
           <li>About</li>
@@ -28,8 +30,12 @@ export default function Headers() {
           </li>
           <li>
             <Link href={'/cart'}>
-              <FontAwesomeIcon icon={faShoppingCart} width={24} height={24} />
-              {cartctx.state.cart.length}
+              <div className='relative'>
+                <FontAwesomeIcon icon={faShoppingCart} width={24} height={24} />
+                <div className='absolute top-0 right-0'>
+                  <span className='bg-slate-700 text-white rounded-full font-bold text-xs'>{cartctx.state.cart.length}</span>
+                </div>
+              </div>
             </Link>
           </li>
         </ul>

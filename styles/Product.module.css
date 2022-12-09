@@ -1,0 +1,8 @@
+.dialog {
+  @apply absolute w-full h-full bg-slate-600/10 backdrop-blur-sm top-0 left-0;
+  @apply flex justify-center items-center
+}
+
+.card {
+  @apply shadow-xl rounded bg-white p-6;
+}
