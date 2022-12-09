@@ -76,7 +76,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className='space-y-3'>
             <div className='flex items-center space-x-3'>
-              <Image alt='Zeta' src={zeta} className='object-cover' width={72} height={72} /> 
+              <Image alt='Zeta' src={zeta} className='object-cover' /> 
               <span className={`${simonetta} font-bold text-2xl`}>Zeta</span>
             </div>
             <p>Tempat Khilaf dan jajan waifu/husbando</p>

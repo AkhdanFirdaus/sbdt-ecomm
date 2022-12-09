@@ -1,28 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
 import Footer from "../../components/footer";
 import Headers from "../../components/header";
 import QuantityInput from "../../components/quantityinput";
 
-import { products } from '../../helpers/dummy'
 import { rupiahFormater } from "../../helpers/formatter";
-import CartContext from "../../lib/CartContext";
+import useCart from "../../lib/CartHooks";
+import useProduct from "../../lib/ProductHooks";
 
-function TableRow(item) {
-  const cartctx = useContext(CartContext)
-  const cartItem = cartctx.state.cart.find(cart => cart.product_id == item.id)
-  const [qty, setQty] = useState(cartItem.qty)
+function TableRow(cart) {
+  const { removeItem, changeQtyItem, getSubtotalItem, getCartItem } = useCart()
+  const { getProduct } = useProduct()
 
-  const handleSetQty = (value) => {
-    cartItem.qty = value
-    setQty(value)
+  const item = getProduct(cart.product_id)
+
+  const changeQty = (value) => {
+    changeQtyItem(item.id, value)
   }
 
-  const removeItemCart = () => {
-    const subcart = cartctx.state.cart.filter(cart => cart.product_id != item.id)
-    cartctx.setCart(subcart)
-  }
+  if (!item) return <div></div>
 
   return (
     <tr key={item.id} className='border-b border-slate-300'>
@@ -33,7 +29,7 @@ function TableRow(item) {
           <button 
             type="button" 
             className='text-green-500 underline'
-            onClick={removeItemCart}
+            onClick={() => removeItem(item.id)}
           >
               Hapus
           </button>
@@ -43,25 +39,17 @@ function TableRow(item) {
         {rupiahFormater(item.price)}
       </td>
       <td className='p-2'>
-        <QuantityInput count={qty} setCount={handleSetQty} />
+        <QuantityInput count={getCartItem(item.id).qty} setCount={changeQty} />
       </td>
       <td className='p-2'>
-        {rupiahFormater(item.price * cartItem.qty)}
+        {rupiahFormater(getSubtotalItem(item.id))}
       </td>
     </tr>
   )
 }
 
 export default function Cart() {
-  const cartctx = useContext(CartContext)
-
-  const getSubtotal = () => {
-    const getProductPrice = (id, qty) => {
-      let product = products.find(product => product.id == id)
-      return product.price * qty
-    }
-    return cartctx.state.cart.reduce((p, n) => p + getProductPrice(n.product_id, n.qty) , 0)
-  }
+  const { getCart, getSubtotal } = useCart()
 
   return (
     <>
@@ -72,7 +60,7 @@ export default function Cart() {
           <div>
             <Link href={'/'} className="leading-10 text-green-400 underline">Belanja Lagi</Link>
           </div>
-          {cartctx.state.cart.length > 0 ? (
+          {getCart().length > 0 ? (
             <>
               <table className="w-full border-collapse">
                 <thead>
@@ -84,10 +72,7 @@ export default function Cart() {
                   </tr>
                 </thead>
                 <tbody>
-                  {cartctx.state.cart.map(cart => {
-                    const item = products.filter(product => product.id == cart.product_id)[0]
-                    return TableRow(item)
-                  })}
+                  {getCart().map(cart => TableRow(cart))}
                 </tbody>
               </table>
               <div className="flex items-center justify-end space-x-8">
@@ -100,7 +85,9 @@ export default function Cart() {
                 </div>
               </div>
             </>
-          ) : (<div className='p-16 bg-white rounded shadow'>Keranjang Kosong</div>)}
+          ) : (
+            <div className='p-16 bg-white rounded shadow'>Keranjang Kosong</div>
+          )}
         </div>
       </main>
       <Footer />
