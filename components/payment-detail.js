@@ -1,27 +1,44 @@
+import formStyle from '../styles/form.module.css'
 import Image from "next/image";
-import { useContext } from "react";
-import { products } from "../helpers/dummy";
-import CartContext from "../lib/CartContext";
+import { useEffect } from "react";
+import { useSelector } from "react-redux"
+import { imageUrl, rupiahFormater } from '../helpers/formatter';
+import { useGetProductsQuery } from '../lib/services/products.service';
 
 export default function PaymentDetail() {
-  const cartctx = useContext(CartContext)
-  const { cart } = cartctx.state
+  const {isLoading, error, data} = useGetProductsQuery()
+  const cart = useSelector((state) => state.cart.value.items)
+
   return (
     <>
-      {cart.map(item => {
-        const product = products.find(product => product.id = item.product_id)
-        return (
-          <div className='grid grid-cols-2 gap-4' key={product.id}>
-            <div>
-              <Image alt='foto' src={product.img} className='object-cover' />
+      <div className='overflow-y-auto'>
+      {error ? (
+        <>Error</>
+      ) : isLoading ? (
+        <>...Loading</>
+      ) : data ? (
+        data.items.filter(item => cart.find(c => c.id == item.id)).map(item => {
+          return (
+            <div className='grid grid-cols-2 gap-4' key={item.id}>
+              <div>
+                <Image 
+                  alt={item.name} 
+                  unoptimized
+                  src={imageUrl(item.image_url)}
+                  width={60}
+                  height={60}
+                  className='object-cover'
+                />
+              </div>
+              <div>
+                <h4>{item.name}</h4>
+                <p className='text-green-500'>{rupiahFormater(item.price)}</p>
+              </div>
             </div>
-            <div>
-              <h4>{product.title}</h4>
-              <p className='text-green-500'>{rupiahFormater(product.price)}</p>
-            </div>
-          </div>
-        )  
-      })}
+          )  
+        })
+      ) : null}
+      </div>
       <hr className='border-slate-400' />
       <div className='w-full flex items-center space-x-2'>
         <input type='text' className={`${formStyle.standard} flex-grow`} placeholder='Coupon Code' />
@@ -45,3 +62,4 @@ export default function PaymentDetail() {
     </>
   )
 }
+

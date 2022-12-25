@@ -20,7 +20,7 @@ export function PaymentLayout({children, nextPage = '/'}) {
           </div>
           <Breadcrumb />
           {children}
-          {nextPage.includes('result') && (
+          {/* {nextPage.includes('result') && ( */}
             <div className='flex justify-between items-center'>
               <div>
                 <button type='button' onClick={router.back} className='text-green-600 underline'>Kembali ke Keranjang</button>
@@ -29,7 +29,7 @@ export function PaymentLayout({children, nextPage = '/'}) {
                 <Link href={nextPage} className='bg-green-600 hover:bg-green-800 rounded px-4 py-2 text-white'>Menuju ke pengiriman</Link>
               </div>
             </div>
-          )}
+          {/* )} */}
         </div>
         <div className="px-24 py-16 md:h-screen bg-neutral-300 space-y-6">
           <PaymentDetail />

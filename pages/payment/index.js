@@ -27,7 +27,7 @@ export default function Payment() {
         <h3 className="text-lg font-bold">Payment method</h3>
         <div className="rounded shadow">
           <div className="flex items-center px-4 py-2 space-x-3 bg-green-600 text-white">
-            <FontAwesomeIcon icon={faCreditCard} />
+            <FontAwesomeIcon icon={faCreditCard} width={40} />
             <p>Credit Card</p>
           </div>
           <div className="p-5 grid gap-4 grid-cols-1">

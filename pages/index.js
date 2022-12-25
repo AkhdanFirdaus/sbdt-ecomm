@@ -1,8 +1,5 @@
 import Head from 'next/head'
 import Banner from '../components/banner'
-import Footer from '../components/footer'
-
-import Headers from '../components/header'
 import Info from '../components/info'
 import { DefaultLayout } from '../components/layouts'
 import Popular from '../components/popular'

@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import zetaava from '../public/assets/zeta-ava-1.png'
 
+import { useSelector } from 'react-redux'
 import { roboto } from '../helpers/fonts'
 import Link from 'next/link'
-import useCart from '../lib/CartHooks'
 
 export default function Headers() {
-  const { getCart } = useCart()
+  const cartCount = useSelector((state) => state.cart.value.items).length
   return (
     <header className={`bg-white ${roboto.className}`}>
       <nav className='container mx-auto p-4'>
@@ -32,7 +32,7 @@ export default function Headers() {
               <div className='relative'>
                 <FontAwesomeIcon icon={faShoppingCart} width={24} height={24} />
                 <div className='absolute top-0 right-0'>
-                  <span className='bg-slate-700 text-white rounded-full font-bold text-xs'>{getCart().length}</span>
+                  <span className='bg-slate-700 text-white rounded-full font-bold text-xs'>{cartCount}</span>
                 </div>
               </div>
             </Link>

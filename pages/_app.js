@@ -1,22 +1,16 @@
 import '../styles/globals.css'
 import { poppins } from '../helpers/fonts'
-import { useState } from 'react'
-import CartContext from '../lib/CartContext'
+import { Provider } from 'react-redux'
+import { store } from '../lib/store'
 
 function MyApp({ Component, pageProps }) {
-  const [cart, setCart] = useState([])
   const getLayout = Component.getLayout || ((page) => page)
   return (
-    <CartContext.Provider
-      value={{
-        state: {cart},
-        setCart
-      }}
-    >
+    <Provider store={store}>
       <main className={poppins.className}>
         {getLayout(<Component {...pageProps} />)}
       </main>
-    </CartContext.Provider>
+    </Provider>
   )
 }
 

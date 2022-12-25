@@ -1,57 +1,72 @@
 import ProductStyle from "../../../styles/Product.module.css"
 
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
+import { useSelector, useDispatch } from 'react-redux'
+import Image from "next/image"
+
 import { faInfoCircle, faShoppingCart } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import Image from "next/image"
-import { useRouter } from "next/router"
-import { useState } from "react"
-import QuantityInput from "../../../components/quantityinput"
 
-import { rupiahFormater } from "../../../helpers/formatter"
-import useCart from "../../../lib/CartHooks"
-import useProduct from "../../../lib/ProductHooks"
+import QuantityInput from "../../../components/quantityinput"
+import { imageUrl, rupiahFormater } from "../../../helpers/formatter"
 import { DefaultLayout } from "../../../components/layouts"
+import { addItem, clearMessage } from "../../../lib/slices/cartSlice"
+import { useGetProductsByIdQuery } from "../../../lib/services/products.service"
 
 export default function ProductPage() {
   const router = useRouter()
   const { id } = router.query
+  const { isLoading, error, data } = useGetProductsByIdQuery(id)
+  
   const [itemAddedAlert, setItemAddedAlert] = useState(false)
   const [qty, setQty] = useState(1)
 
-  const { addItem, getCartItem, getCart } = useCart()
-  const { getProduct } = useProduct()
+  const message = useSelector((state) => state.cart.value.message)
+  const dispatch = useDispatch()
   
-  const product = getProduct(id)
-
-  const addToCart = (id) => {
-    if (getCartItem(id) == null) {
-      addItem(id, qty)
-    } else {
-      setItemAddedAlert(true)
-    }
+  useEffect(() => {
+    setItemAddedAlert(message !== '')
+  }, [message])
+  
+  const addToCart = () => {
+    dispatch(addItem({id: data.data.id, price: data.data.price, qty: qty}))
   }
 
-  if (!product) return <div>...Loading</div>
-
-  return (
+  return error ? (
+    <div className="w-full h-screen p-10 flex justify-center items-center">Error happened</div>
+  ) : isLoading ? (
+    <div className="w-full h-screen p-10 flex justify-center items-center">...Loading</div>
+  ) : data ? (
     <div className={`relative ${itemAddedAlert && 'h-screen overflow-y-hidden'}`}>
       <main>
         <div className="px-36 py-16 grid grid-cols-1 md:grid-cols-2">
           <div className="text-center space-y-5">
             <div className="bg-slate-200 px-5 py-10">
-              <Image alt={product.title} src={product.img} className="object-cover mx-auto" />
+              <Image 
+                alt={data.data.name}
+                unoptimized
+                src={imageUrl(data.data.image_url)}
+                className="object-cover mx-auto h-auto"
+                width={300}
+                height={300}
+              />
             </div>
-            <h3 className="font-bold text-lg">{product.title}</h3>
+            <h3 className="font-bold text-lg">{data.data.name}</h3>
             <p>🚚 GRATIS ONGKIR</p>
           </div>
           <div className="p-5 space-y-5">
-            <h3 className="font-bold text-2xl">{product.title}</h3>
-            <p className="text-green-600 font-bold text-lg">{rupiahFormater(product.price)}</p>
-            <QuantityInput count={qty} setCount={setQty} />
+            <h3 className="font-bold text-2xl">{data.data.name}</h3>
+            <p className="text-green-600 font-bold text-lg">{rupiahFormater(data.data.price)}</p>
+            <QuantityInput 
+              count={qty} 
+              increment={() => setQty(qty + 1)} 
+              decrement={() => setQty(qty - 1)} 
+            />
             <button 
               className="flex justify-between items-center bg-green-500 px-4 py-2 text-white"
               type="button"
-              onClick={() => addToCart(product.id)}
+              onClick={addToCart}
             >
                 <FontAwesomeIcon icon={faShoppingCart} width={24} height={24} /> + Add to Cart
             </button>
@@ -76,17 +91,18 @@ export default function ProductPage() {
       {itemAddedAlert && (
         <div className={ProductStyle.dialog} onClick={() => {
           setItemAddedAlert(false)
+          dispatch(clearMessage())
         }}>
           <div className={`${ProductStyle.card} flex items-center flex-col space-y-8`}>
             <div>
               <FontAwesomeIcon icon={faInfoCircle} size='1x' width={48} height={48} className='text-blue-600' />
             </div>
-            <h3 className="font-bold">Item sudah ada di keranjang</h3>
+            <h3 className="font-bold">{message}</h3>
           </div>
         </div>
       )}
     </div>
-  )
+  ) : null
 }
 
 ProductPage.getLayout = function getLayout(page) {
